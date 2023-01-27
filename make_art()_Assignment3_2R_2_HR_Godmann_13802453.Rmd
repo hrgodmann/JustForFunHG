@@ -1,0 +1,124 @@
+---
+title: "Random_Art"
+output: html_document
+date: "2023-01-27"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Generating Random Art in R (q 3.2.R2)
+
+### Henrik Godmann
+
+The following function is based on a tutorial about random art in R:
+https://art-from-code.netlify.app/day-1/session-1/
+
+It generates pseudo-random data, then randomly chooses one out of 3 
+painting styles and one of 150 color palettes and plots the data using ggplot2. 
+
+The code is as follows: 
+
+```{r}
+
+
+make_art <- function(seed = 87){
+  # set seed
+  set.seed(seed)
+  
+  # load required packages 
+  library(tibble)
+  library(tidyverse)
+  library(ggthemes)
+  
+  # generate random data to visualize 
+  set.seed(seed)
+  n <- sample(1:100, 1)
+  mean <- sample(seq(from = -2, to = 2, by = 0.1), 1)
+  sd <- sample(seq(from = 0, to = .99, by = 0.1), 1)
+  
+  set.seed(seed)
+  dat <- tibble(
+    x0 = rbeta(n, 1, 3),
+    y0 = rbeta(n, 2, 4),
+    x1 = x0 + rnorm(n, mean, sd),
+    y1 = y0 + rnorm(n, mean, sd),
+    shade = runif(n), 
+    size = runif(n)
+  )
+  
+  # choose random color palette
+  set.seed(seed)
+  palette <- canva_palettes[[sample(150,1)]]
+  
+  # choose random painting style 
+  set.seed(seed)
+  painting_style <- sample(3, 1)
+  
+  # plot random data
+  # style 1: 
+  if (painting_style == 1){
+    art <-  dat %>% ggplot(aes(x = x0, y = y0,
+                        xend = x1, yend = y1,
+                        colour = shade, size = size)) +
+      geom_path(show.legend = FALSE) +  
+      coord_polar() +
+      scale_y_continuous(expand = c(0, 0)) +
+      scale_x_continuous(expand = c(0, 0)) + 
+      scale_colour_gradientn(colours = palette) +
+      scale_size(range = c(0, 10)) + 
+      theme_void()
+    
+  } else if (painting_style == 2) {
+    # style 2
+    art <- dat %>%
+      ggplot(aes(x = x0, y = y0,
+                 xend = x1, yend = y1,
+                 colour = shade, size = size)) +
+      geom_segment(show.legend = FALSE) +  
+      coord_polar() +
+      scale_y_continuous(expand = c(0, 0)) +
+      scale_x_continuous(expand = c(0, 0)) + 
+      scale_colour_gradientn(colours = palette) + 
+      scale_size(range = c(0, 10)) + 
+      theme_void()
+    
+  } else {
+    # style 3
+    art <-  dat %>%
+      ggplot(aes(x = x0, y = y0,
+                 xend = x1, yend = y1,
+                 colour = shade, size = size)) +
+      geom_point(show.legend = FALSE) +  
+      coord_polar() +
+      scale_y_continuous(expand = c(0, 0)) +
+      scale_x_continuous(expand = c(0, 0)) + 
+      scale_colour_gradientn(colours = palette) + 
+      scale_size(range = c(0, 10)) + 
+      theme_void()
+  }
+ art
+
+}
+```
+
+The function takes the optional argument of a seed to reproduce the same piece of 
+art multiple times. The default is 87 which results in the following image: 
+
+```{r}
+make_art(17)
+```
+
+Here are a few samples from my art collection, drawn by make_art: 
+
+```{r}
+make_art(72)
+make_art(4)
+make_art(94)
+make_art(100002)
+```
+
+
