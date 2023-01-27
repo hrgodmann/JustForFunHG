@@ -8,7 +8,7 @@ cheat() helps with the assignments numbers 1,7 and 17. If other numbers are spec
 
 ## Art Functions
 
-random_vanGogh() creates random art plots based on data that is randomly sampled from different distributions.
+make_art() creates random art plots based on data that is randomly sampled from different distributions.
 The packages tibble, tidyverse, ggthemes need to be installed.
 Insert any number and see what happens!
 
