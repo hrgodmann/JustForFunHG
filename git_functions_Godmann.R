@@ -9,8 +9,6 @@ remind_me <- function(){
   cat("\n- ...end")
 }
 
-remind_me()
-
 
 cheat <- function(n){
     if(n==1){
@@ -23,6 +21,5 @@ cheat <- function(n){
     } else{message("Please ask for another assignment number")}
 }
 
-cheat(17)
 
 
